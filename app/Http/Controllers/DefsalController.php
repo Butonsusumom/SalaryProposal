@@ -43,7 +43,7 @@ class DefsalController extends Controller
         $min=$mindef + round( $experience/5) * $y;
         $max=$y* $experience + $mindef + $x;
 
-        return response()->json(array('min'=>$min,'max'=>$max));
+        return response()->json(array('minsal'=>$min,'maxsal'=>$max));
     }
 
     /**
