@@ -6,6 +6,7 @@ use App\defsal;
 use App\Salary;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 
 class DefsalController extends Controller
@@ -26,6 +27,7 @@ class DefsalController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function calculate($city, $position, $experience) {
+        Log::info('Calculate the salary for '.$position.' in '.$city.', who has experience '.$experience.' years');
         $user = DefSal::where('position', $position)->where('region', $city)->first();
         //return response()->json($user);
         //$user= DefSal::find($id);
@@ -42,6 +44,7 @@ class DefsalController extends Controller
         $y = ($maxdef - $mindef - $x) / 20;
         $min=$mindef + round( $experience/5) * $y;
         $max=$y* $experience + $mindef + $x;
+
 
         return response()->json(array('minsal'=>$min,'maxsal'=>$max));
     }

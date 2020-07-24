@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->enum('role',array('user', 'admin'));
             $table->string('password');
+            $table->string('api_token', 60)->unique()->nullable()->default(null);
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateUsersTable extends Migration
      * @return void
      */
     public function down() {
-       // Schema::dropIfExists('users');
+        //Schema::dropIfExists('users');
     }
 }
