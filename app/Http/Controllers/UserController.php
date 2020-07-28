@@ -17,12 +17,14 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return JsonResponse
      */
-    public function index() {
+    public function index(Request $request) {
+        $lang=$request->headers->get('Accept-Language');
         Log::info('Show all users');
         $user = User::all();
-        return response()->json($user,200);
+        return response()->json($user,Response::HTTP_OK);
     }
 
     /**
@@ -32,20 +34,24 @@ class UserController extends Controller
      * @return JsonResponse
      */
     public function create(Request $request) {
-       //  User::create($request->all);
-        //return response()->json();
-        Log::info('Create user');
-        $user = new User();
+        $lang = $request->headers->get('Accept-Language');
+        if (User::where('email', '=', $request->email)->exists()) {
+            return response()->json(array('message'=>Response::$statusTexts[Response::HTTP_CONFLICT],'code'=>Response::HTTP_CONFLICT),Response::HTTP_CONFLICT);
+        }
+        else {
+            Log::info('Create user');
+            $user = new User();
 
-        $user->lastName = $request->lastName;
-        $user->firstName= $request->firstName;
-        $user->email = $request->email;
-        $user->role = $request->role;
-        $user->password = $request->password;
-        $user->api_token= $user->generateToken();
+            $user->lastName = $request->lastName;
+            $user->firstName = $request->firstName;
+            $user->email = $request->email;
+            $user->role = $request->role;
+            $user->password = $request->password;
+            $user->api_token = $user->generateToken();
 
-        $user->save();
-        return response()->json($user,201);
+            $user->save();
+            return response()->json($user, Response::HTTP_CREATED);
+        }
     }
 
     /**
@@ -63,14 +69,16 @@ class UserController extends Controller
      * Display the specified resource.
      *
      * @param $id
+     * @param Request $request
      * @return JsonResponse
      */
-    public function show($id){
-        if (!(User::find($id)))return response()->json(array('message'=>'Not Found','code'=>404),404);
+    public function show($id,Request $request){
+        $lang=$request->headers->get('Accept-Language');
+        if (!(User::find($id)))return response()->json(array('message'=>Response::$statusTexts[Response::HTTP_NOT_FOUND],'code'=>Response::HTTP_NOT_FOUND),Response::HTTP_NOT_FOUND);
         else {
             Log::info('Find user by id ' . $id);
             $user = User::find($id);
-            return response()->json($user,200);
+            return response()->json($user,Response::HTTP_OK);
         }
     }
 
@@ -82,15 +90,18 @@ class UserController extends Controller
      * @return JsonResponse
      */
     public function edit(Request $request, $id) {
-        if (!(User::find($id)))return response()->json(array('message'=>'Not Found','code'=>404),404);
+        $lang=$request->headers->get('Accept-Language');
+        if (User::where('email', '=', $request->email)->exists()) {
+            return response()->json(array('message'=>Response::$statusTexts[Response::HTTP_CONFLICT],'code'=>Response::HTTP_CONFLICT),Response::HTTP_CONFLICT);
+        }
         else {
-            Log::info('Update user' . $id);
-            $user = User::findOrFail($id);
-            $user->update($request->all());
-            return response()
-                // ->setStatusCode(201, 'The resource is created successfully!')
-                //->header('Content-Type','application/json')
-                ->json($user,201);
+            if (!(User::find($id))) return response()->json(array('message' => Response::$statusTexts[Response::HTTP_NOT_FOUND], 'code' => Response::HTTP_NOT_FOUND), Response::HTTP_NOT_FOUND);
+                 else {
+                      Log::info('Update user' . $id);
+                      $user = User::findOrFail($id);
+                      $user->update($request->all());
+                      return response()->json($user, Response::HTTP_OK);
+                 }
         }
     }
 
@@ -109,14 +120,16 @@ class UserController extends Controller
      * Remove the specified resource from storage.
      *
      * @param $id
+     * @param Request $request
      * @return JsonResponse
      */
-    public function destroy($id){
-        if (!(User::find($id)))return response()->json(array('message'=>'Not Found','code'=>404),404);//return response()->json(array(Res::HTTP_NOT_FOUND,Res::$statusTextsEn[404]));
+    public function destroy($id,Request $request){
+        $lang=$request->headers->get('Accept-Language');
+        if (!(User::find($id)))return response()->json(array('message'=>Response::$statusTexts[Response::HTTP_NOT_FOUND],'code'=>Response::HTTP_NOT_FOUND),Response::HTTP_NOT_FOUND);//return response()->json(array(Res::HTTP_NOT_FOUND,Res::$statusTextsEn[404]));
         else {
             Log::info('Delete user'.$id);
             $user = User::find($id)->delete();
-            return response()->json(array('message'=>'No Content','code'=>204),204);
+            return response()->json(array('message'=>Response::$statusTexts[Response::HTTP_NO_CONTENT],'code'=>Response::HTTP_NO_CONTENT),Response::HTTP_NO_CONTENT);
         }
     }
 }

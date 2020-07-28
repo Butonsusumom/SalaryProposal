@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\defsal;
 use App\Salary;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -26,7 +27,11 @@ class DefsalController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function calculate($city, $position, $experience) {
+    public function calculate($city, $position, $experience, Request $request) {
+        $lang=$request->headers->get('Accept-Language');
+        $sal = DefSal::where('position', $position)->where('region', $city)->first();
+        if ($sal->exists()) {
+
         Log::info('Calculate the salary for '.$position.' in '.$city.', who has experience '.$experience.' years');
         $user = DefSal::where('position', $position)->where('region', $city)->first();
         //return response()->json($user);
@@ -47,6 +52,10 @@ class DefsalController extends Controller
 
 
         return response()->json(array('minsal'=>$min,'maxsal'=>$max));
+        }
+        else{
+            return response()->json(array('message'=>Response::$statusTexts[Response::HTTP_CONFLICT],'code'=>Response::HTTP_CONFLICT),Response::HTTP_CONFLICT);
+        }
     }
 
     /**
