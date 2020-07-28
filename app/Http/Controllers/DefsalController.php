@@ -29,8 +29,8 @@ class DefsalController extends Controller
      */
     public function calculate($city, $position, $experience, Request $request) {
         $lang=$request->headers->get('Accept-Language');
-        if ($lang=='en') $mess=Response::$statusTexts;
         if ($lang=='de') $mess=Response::$statusTextsDe;
+        else $mess=Response::$statusTexts;
 
         $sal = DefSal::where('position', $position)->where('region', $city)->first();
         if ($sal->exists()) {

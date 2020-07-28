@@ -37,8 +37,8 @@ class UserController extends Controller
      */
     public function create(Request $request) {
         $lang = $request->headers->get('Accept-Language');
-        if ($lang=='en') $mess=Response::$statusTexts;
         if ($lang=='de') $mess=Response::$statusTextsDe;
+        else $mess=Response::$statusTexts;
 
         if (User::where('email', '=', $request->email)->exists()) {
             return response()->json(array('message'=>$mess[Response::HTTP_CONFLICT],'code'=>Response::HTTP_CONFLICT),Response::HTTP_CONFLICT);
@@ -79,8 +79,8 @@ class UserController extends Controller
      */
     public function show($id,Request $request){
         $lang=$request->headers->get('Accept-Language');
-        if ($lang=='en') $mess=Response::$statusTexts;
         if ($lang=='de') $mess=Response::$statusTextsDe;
+        else $mess=Response::$statusTexts;
 
         if (!(User::find($id)))return response()->json(array('message'=>$mess[Response::HTTP_NOT_FOUND],'code'=>Response::HTTP_NOT_FOUND),Response::HTTP_NOT_FOUND);
         else {
@@ -99,8 +99,8 @@ class UserController extends Controller
      */
     public function edit(Request $request, $id) {
         $lang=$request->headers->get('Accept-Language');
-        if ($lang=='en') $mess=Response::$statusTexts;
         if ($lang=='de') $mess=Response::$statusTextsDe;
+        else $mess=Response::$statusTexts;
 
         if (User::where('email', '=', $request->email)->exists()) {
             return response()->json(array('message'=>$mess[Response::HTTP_CONFLICT],'code'=>Response::HTTP_CONFLICT),Response::HTTP_CONFLICT);
@@ -136,8 +136,8 @@ class UserController extends Controller
      */
     public function destroy($id,Request $request){
         $lang=$request->headers->get('Accept-Language');
-        if ($lang=='en') $mess=Response::$statusTexts;
         if ($lang=='de') $mess=Response::$statusTextsDe;
+        else $mess=Response::$statusTexts;
 
         if (!(User::find($id)))return response()->json(array('message'=>$mess[Response::HTTP_NOT_FOUND],'code'=>Response::HTTP_NOT_FOUND),Response::HTTP_NOT_FOUND);//return response()->json(array(Res::HTTP_NOT_FOUND,Res::$statusTextsEn[404]));
         else {
