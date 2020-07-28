@@ -29,6 +29,9 @@ class DefsalController extends Controller
      */
     public function calculate($city, $position, $experience, Request $request) {
         $lang=$request->headers->get('Accept-Language');
+        if ($lang=='en') $mess=Response::$statusTexts;
+        if ($lang=='de') $mess=Response::$statusTextsDe;
+
         $sal = DefSal::where('position', $position)->where('region', $city)->first();
         if ($sal->exists()) {
 
@@ -51,10 +54,10 @@ class DefsalController extends Controller
         $max=$y* $experience + $mindef + $x;
 
 
-        return response()->json(array('minsal'=>$min,'maxsal'=>$max));
+        return response()->json(array('minsal'=>$min,'maxsal'=>$max),Response::HTTP_OK);
         }
         else{
-            return response()->json(array('message'=>Response::$statusTexts[Response::HTTP_CONFLICT],'code'=>Response::HTTP_CONFLICT),Response::HTTP_CONFLICT);
+            return response()->json(array('message'=>$mess[Response::HTTP_CONFLICT],'code'=>Response::HTTP_CONFLICT),Response::HTTP_CONFLICT);
         }
     }
 
@@ -64,6 +67,8 @@ class DefsalController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
+
+
     {
         //
     }

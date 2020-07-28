@@ -210,6 +210,78 @@ class Response
     ];
 
     /**
+     * Status codes translation table.
+     *
+     *
+     * Unless otherwise noted, the status code is defined in RFC2616.
+     *
+     * @var array
+     */
+    public static $statusTextsDe = [
+100 => 'Weiter',
+101 => 'Switching Protocols',
+102 => 'Verarbeitung', // RFC2518
+200 => 'OK',
+201 => 'Erstellt',
+202 => 'Akzeptiert',
+203 => 'Nicht maßgebliche Informationen',
+204 => 'Kein Inhalt',
+205 => 'Inhalt zurücksetzen',
+206 => 'Teilinhalt',
+207 => 'Multi-Status', // RFC4918
+208 => 'Bereits gemeldet', // RFC5842
+226 => 'IM verwendet', // RFC3229
+300 => 'Mehrfachauswahl',
+301 => 'Dauerhaft verschoben',
+302 => 'Gefunden',
+303 => 'Andere sehen',
+304 => 'Nicht geändert',
+305 => 'Proxy verwenden',
+307 => 'Temporäre Weiterleitung',
+308 => 'Permanent Redirect', // RFC7238
+400 => 'Bad Request',
+401 => 'Nicht autorisiert',
+402 => 'Zahlung erforderlich',
+403 => 'Verboten',
+404 => 'Nicht gefunden',
+405 => 'Methode nicht erlaubt',
+406 => 'Nicht akzeptabel',
+407 => 'Proxy-Authentifizierung erforderlich',
+408 => 'Zeitüberschreitung anfordern',
+409 => 'Konflikt',
+410 => 'Gone',
+411 => 'Länge erforderlich',
+412 => 'Voraussetzung fehlgeschlagen',
+413 => 'Payload Too Large',
+414 => 'URI zu lang',
+415 => 'Nicht unterstützter Medientyp',
+416 => 'Reichweite nicht zufriedenstellbar',
+417 => 'Erwartung fehlgeschlagen',
+418 => 'Ich bin eine Teekanne', // RFC2324
+421 => 'Fehlgeleitete Anforderung', // RFC7540
+422 => 'Nicht verarbeitbare Entität', // RFC4918
+423 => 'Gesperrt', // RFC4918
+424 => 'Fehlgeschlagene Abhängigkeit', // RFC4918
+425 => 'Reserviert für WebDAV Advanced Collections abgelaufen Vorschlag', // RFC2817
+426 => 'Upgrade erforderlich', // RFC2817
+428 => 'Voraussetzung erforderlich', // RFC6585
+429 => 'Zu viele Anfragen', // RFC6585
+431 => 'Headerfelder zu groß anfordern', // RFC6585
+451 => 'Aus rechtlichen Gründen nicht verfügbar', // RFC7725
+500 => 'Interner Serverfehler',
+501 => 'Nicht implementiert',
+502 => 'Bad Gateway',
+503 => 'Dienst nicht verfügbar',
+504 => 'Gateway Timeout',
+505 => 'HTTP-Version nicht unterstützt',
+506 => 'Variante verhandelt auch', // RFC2295
+507 => 'Unzureichender Speicher', // RFC4918
+508 => 'Loop Detected', // RFC5842
+510 => 'Nicht erweitert', // RFC2774
+511 => 'Netzwerkauthentifizierung erforderlich', // RFC6585
+];
+
+    /**
      * @throws \InvalidArgumentException When the HTTP status code is not valid
      */
     public function __construct(?string $content = '', int $status = 200, array $headers = [])

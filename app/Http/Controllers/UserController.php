@@ -22,6 +22,8 @@ class UserController extends Controller
      */
     public function index(Request $request) {
         $lang=$request->headers->get('Accept-Language');
+        $mess=Response::$statusTexts;
+
         Log::info('Show all users');
         $user = User::all();
         return response()->json($user,Response::HTTP_OK);
@@ -35,8 +37,11 @@ class UserController extends Controller
      */
     public function create(Request $request) {
         $lang = $request->headers->get('Accept-Language');
+        if ($lang=='en') $mess=Response::$statusTexts;
+        if ($lang=='de') $mess=Response::$statusTextsDe;
+
         if (User::where('email', '=', $request->email)->exists()) {
-            return response()->json(array('message'=>Response::$statusTexts[Response::HTTP_CONFLICT],'code'=>Response::HTTP_CONFLICT),Response::HTTP_CONFLICT);
+            return response()->json(array('message'=>$mess[Response::HTTP_CONFLICT],'code'=>Response::HTTP_CONFLICT),Response::HTTP_CONFLICT);
         }
         else {
             Log::info('Create user');
@@ -74,7 +79,10 @@ class UserController extends Controller
      */
     public function show($id,Request $request){
         $lang=$request->headers->get('Accept-Language');
-        if (!(User::find($id)))return response()->json(array('message'=>Response::$statusTexts[Response::HTTP_NOT_FOUND],'code'=>Response::HTTP_NOT_FOUND),Response::HTTP_NOT_FOUND);
+        if ($lang=='en') $mess=Response::$statusTexts;
+        if ($lang=='de') $mess=Response::$statusTextsDe;
+
+        if (!(User::find($id)))return response()->json(array('message'=>$mess[Response::HTTP_NOT_FOUND],'code'=>Response::HTTP_NOT_FOUND),Response::HTTP_NOT_FOUND);
         else {
             Log::info('Find user by id ' . $id);
             $user = User::find($id);
@@ -91,11 +99,14 @@ class UserController extends Controller
      */
     public function edit(Request $request, $id) {
         $lang=$request->headers->get('Accept-Language');
+        if ($lang=='en') $mess=Response::$statusTexts;
+        if ($lang=='de') $mess=Response::$statusTextsDe;
+
         if (User::where('email', '=', $request->email)->exists()) {
-            return response()->json(array('message'=>Response::$statusTexts[Response::HTTP_CONFLICT],'code'=>Response::HTTP_CONFLICT),Response::HTTP_CONFLICT);
+            return response()->json(array('message'=>$mess[Response::HTTP_CONFLICT],'code'=>Response::HTTP_CONFLICT),Response::HTTP_CONFLICT);
         }
         else {
-            if (!(User::find($id))) return response()->json(array('message' => Response::$statusTexts[Response::HTTP_NOT_FOUND], 'code' => Response::HTTP_NOT_FOUND), Response::HTTP_NOT_FOUND);
+            if (!(User::find($id))) return response()->json(array('message' => $mess[Response::HTTP_NOT_FOUND], 'code' => Response::HTTP_NOT_FOUND), Response::HTTP_NOT_FOUND);
                  else {
                       Log::info('Update user' . $id);
                       $user = User::findOrFail($id);
@@ -125,11 +136,14 @@ class UserController extends Controller
      */
     public function destroy($id,Request $request){
         $lang=$request->headers->get('Accept-Language');
-        if (!(User::find($id)))return response()->json(array('message'=>Response::$statusTexts[Response::HTTP_NOT_FOUND],'code'=>Response::HTTP_NOT_FOUND),Response::HTTP_NOT_FOUND);//return response()->json(array(Res::HTTP_NOT_FOUND,Res::$statusTextsEn[404]));
+        if ($lang=='en') $mess=Response::$statusTexts;
+        if ($lang=='de') $mess=Response::$statusTextsDe;
+
+        if (!(User::find($id)))return response()->json(array('message'=>$mess[Response::HTTP_NOT_FOUND],'code'=>Response::HTTP_NOT_FOUND),Response::HTTP_NOT_FOUND);//return response()->json(array(Res::HTTP_NOT_FOUND,Res::$statusTextsEn[404]));
         else {
             Log::info('Delete user'.$id);
             $user = User::find($id)->delete();
-            return response()->json(array('message'=>Response::$statusTexts[Response::HTTP_NO_CONTENT],'code'=>Response::HTTP_NO_CONTENT),Response::HTTP_NO_CONTENT);
+            return response()->json(array('message'=>$mess[Response::HTTP_NO_CONTENT],'code'=>Response::HTTP_NO_CONTENT),Response::HTTP_NO_CONTENT);
         }
     }
 }
