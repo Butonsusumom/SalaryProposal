@@ -22,7 +22,7 @@ class DefsalController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource.c
      *
      * @return \Illuminate\Http\JsonResponse
      */
