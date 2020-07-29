@@ -23,9 +23,15 @@ class UserController extends Controller
     public function index(Request $request) {
         $lang=$request->headers->get('Accept-Language');
         $mess=Response::$statusTexts;
-
         Log::info('Show all users');
-        $user = User::all();
+        $searchTerm=$request->search;
+        if ($searchTerm==null) $user = User::all();
+        else
+            $user = User::query()
+            ->where('lastName', 'LIKE', "%{$searchTerm}%")
+            ->orWhere('firstName', 'LIKE', "%{$searchTerm}%")
+            ->orWhere('email', 'LIKE', "%{$searchTerm}%")
+            ->get();
         return response()->json($user,Response::HTTP_OK);
     }
 

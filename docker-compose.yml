@@ -10,9 +10,6 @@ services:
       - 443:443
     environment:
       TZ: "Europe/Zurich"
-    restart: always
-    volumes:
-        - ./:/var/www/html
 
   fpm:
     build: docker/contaners/fpm
@@ -20,12 +17,9 @@ services:
       - ./:/var/www:rw
     links:
       - mariadb
-      - mongo
-      - redis
     environment:
       XDEBUG_CONFIG: remote_host=${REMOTE_HOST}
       TZ: "Europe/Zurich"
-    restart: always
 
   mariadb:
     build: docker/contaners/mariadb
@@ -39,19 +33,3 @@ services:
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
       TZ: "Europe/Zurich"
-    restart: always
-
-  mongo:
-    image: mongo:3.6
-    #    environment:
-    #      MONGO_INITDB_ROOT_USERNAME: root
-    #      MONGO_INITDB_ROOT_PASSWORD: 123
-    volumes:
-      - ./docker/database/mongo:/var/lib/mongodb
-    restart: always
-
-  redis:
-    image: redis
-    volumes:
-      - ./docker/database/redis:/data
-    restart: always
