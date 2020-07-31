@@ -21,7 +21,7 @@ Route::post('user', 'UserController@create');
 Route::put('user/{id}', 'UserController@edit');
 Route::delete('user/{id}', 'UserController@destroy');
 
-Route::get('/mathmodel/{city}/{position}/{experience}', 'DefsalController@calculate');
-Route::get('/mathmodel', 'DefsalController@index');
+Route::get('/mathmodel', 'DefsalController@calculate');
+Route::get('/mathmod', 'DefsalController@index');
 
 Route::post('login', 'Auth\LoginController@login');

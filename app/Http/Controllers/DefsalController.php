@@ -27,12 +27,15 @@ class DefsalController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function calculate($city, $position, $experience, Request $request) {
+    public function calculate(Request $request) {
+        $city=$request->city;
+        $position=$request->position;
+        $experience=$request->experience;
         $lang=$request->headers->get('Accept-Language');
         if ($lang=='de') $mess=Response::$statusTextsDe;
         else $mess=Response::$statusTexts;
 
-        $sal = DefSal::where('position', $position)->where('region', $city)->first();
+        $sal = DefSal::where('position', $position)->where('region', $city);
         if ($sal->exists()) {
 
         Log::info('Calculate the salary for '.$position.' in '.$city.', who has experience '.$experience.' years');
@@ -57,7 +60,7 @@ class DefsalController extends Controller
         return response()->json(array('minsal'=>$min,'maxsal'=>$max),Response::HTTP_OK);
         }
         else{
-            return response()->json(array('message'=>$mess[Response::HTTP_CONFLICT],'code'=>Response::HTTP_CONFLICT),Response::HTTP_CONFLICT);
+            return response()->json(array('message'=>$mess[Response::HTTP_NOT_FOUND],'code'=>Response::HTTP_NOT_FOUND),Response::HTTP_NOT_FOUND);
         }
     }
 
